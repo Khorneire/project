@@ -3,7 +3,7 @@ FROM php:8.3-fpm-bullseye
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git curl unzip zip libpq-dev libxml2-dev libzip-dev libpng-dev libonig-dev \
     libjpeg-dev libfreetype6-dev libicu-dev libxslt1-dev libsqlite3-dev libreadline-dev libmagickwand-dev \
-    nodejs npm build-essential \
+    build-essential default-mysql-client \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
@@ -18,6 +18,9 @@ WORKDIR /var/www
 
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www
+
+COPY wait-for-mysql.sh /usr/local/bin/wait-for-mysql.sh
+RUN chmod +x /usr/local/bin/wait-for-mysql.sh
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh

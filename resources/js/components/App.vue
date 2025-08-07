@@ -1,7 +1,7 @@
 <template>
-  <oc-container>
+  <div>
     App.vue
     <hr />
-    <oc-button color="blue">This is a button!</oc-button>
-  </oc-container>
+    <button>This is a button!</button>
+  </div>
 </template>

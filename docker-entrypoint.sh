@@ -34,7 +34,7 @@ if command -v php >/dev/null 2>&1; then
   php artisan view:cache
 
   echo "Running Laravel migrations..."
-  php artisan migrate --force
+  wait-for-mysql.sh db php artisan migrate --force
 
   echo "Seeding database..."
   php artisan db:seed --force
