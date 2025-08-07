@@ -1,4 +1,6 @@
 <?php
 
-/** @var Router $router */
-use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FileUploadController;
+
+Route::post('/upload', [FileUploadController::class, 'upload']);
