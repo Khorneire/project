@@ -1,7 +1,11 @@
 <template>
   <div>
-    App.vue
-    <hr />
-    <button>This is a button!</button>
+    <h1>Hello from App.vue</h1>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'App'
+};
+</script>

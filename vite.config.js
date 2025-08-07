@@ -19,7 +19,7 @@ export default defineConfig({
     ],
     server: {
         hmr: {
-            host: "local.project.co.uk",
+            host: "local.senright-project.co.uk",
         },
     },
 });
