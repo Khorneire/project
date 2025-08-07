@@ -40,7 +40,10 @@ docker compose version
 4. Running the Project
 
 ```
-docker compose build --no-cache
+docker compose up --build
 ```
+5. Access
 
-If you need any help or run into issues, feel free to reach out!
+Visit http://localhost:8000
+
+**If you need any help or run into issues, feel free to reach out!**
