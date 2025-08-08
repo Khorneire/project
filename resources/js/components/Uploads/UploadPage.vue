@@ -37,13 +37,14 @@
         :aria-disabled="isDisabled"
         class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded transition"
       >
-        <span v-if="loading && progress < 100">Uploading {{ progress }}%</span>
+        <span v-if="parsing">Parsing File...</span>
+        <span v-else-if="loading && progress < 100">Uploading {{ progress }}%</span>
         <span v-else-if="loading">Finishing...</span>
         <span v-else>Upload File</span>
       </button>
 
       <div
-        v-if="loading"
+        v-if="parsing || loading"
         class="w-full bg-gray-200 h-4 rounded overflow-hidden shadow-inner"
         aria-live="polite"
         aria-atomic="true"
@@ -63,8 +64,9 @@
       </div>
 
       <raw-data-view
-        v-if="parsedNames.length"
+        v-if="parsedNames.length || loading || parsing"
         :parsed-names="parsedNames"
+        :loading="loading || parsing"
         class="mt-6"
       />
     </form>
@@ -80,9 +82,11 @@ const file = ref(null);
 const fileInput = ref(null);
 const error = ref("");
 const loading = ref(false);
+const parsing = ref(false);
 const progress = ref(0);
 const successMessage = ref("");
 const parsedNames = ref([]);
+const parsedSuccessfully = ref(false);
 
 const emit = defineEmits(["upload-success"]);
 
@@ -92,18 +96,19 @@ const allowedTypes = new Set([
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 ]);
 
-const isDisabled = computed(() => !file.value || loading.value);
-
 function handleFileChange(event) {
   const selectedFile = event.target.files?.[0] ?? null;
 
+  // Reset states except parsing/loading since parseFile sets parsing true
   error.value = "";
   successMessage.value = "";
   progress.value = 0;
   parsedNames.value = [];
+  parsedSuccessfully.value = false;
 
   if (selectedFile && allowedTypes.has(selectedFile.type)) {
     file.value = selectedFile;
+    // Start parsing after file is set
     parseFile();
   } else {
     file.value = null;
@@ -111,18 +116,15 @@ function handleFileChange(event) {
   }
 }
 
-watch(file, () => {
-  error.value = "";
-  successMessage.value = "";
-  progress.value = 0;
-  parsedNames.value = [];
-});
-
 async function parseFile() {
   if (!file.value) return;
 
-  parsedNames.value = [];
+  parsing.value = true;
+  loading.value = false;
+  progress.value = 0;
   error.value = "";
+  parsedNames.value = [];
+  parsedSuccessfully.value = false;
 
   const formData = new FormData();
   formData.append("file", file.value);
@@ -130,13 +132,25 @@ async function parseFile() {
   try {
     const response = await axios.post("/api/parse", formData, {
       headers: { "Content-Type": "multipart/form-data" },
+      onUploadProgress: (event) => {
+        if (event.lengthComputable) {
+          progress.value = Math.round((event.loaded * 100) / event.total);
+        }
+      },
     });
 
     parsedNames.value = response.data.parsedNames || [];
+    progress.value = 100;
+    parsedSuccessfully.value = true;
   } catch (err) {
     error.value = err.response?.data?.error || "Failed to parse file.";
+    parsedSuccessfully.value = false;
+  } finally {
+    parsing.value = false;
   }
 }
+
+const isDisabled = computed(() => !file.value || loading.value || parsing.value || !parsedSuccessfully.value);
 
 async function handleSubmit() {
   if (!file.value) {
@@ -145,6 +159,7 @@ async function handleSubmit() {
   }
 
   loading.value = true;
+  parsing.value = false;
   progress.value = 0;
   error.value = "";
   successMessage.value = "";
@@ -171,6 +186,7 @@ async function handleSubmit() {
       fileInput.value.value = "";
     }
     parsedNames.value = [];
+    parsedSuccessfully.value = false;
     emit("upload-success");
   } catch (err) {
     error.value =

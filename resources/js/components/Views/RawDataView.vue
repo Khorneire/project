@@ -1,5 +1,8 @@
 <template>
-  <div class="w-full">
+  <div v-if="loading" class="text-center text-gray-500 py-4">
+    Loading parsed data...
+  </div>
+  <div v-else class="w-full">
     <h2 class="text-xl font-bold mb-4 text-gray-800">Parsed People</h2>
 
     <div
@@ -42,6 +45,10 @@ defineProps({
   parsedNames: {
     type: Array,
     default: () => [],
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>

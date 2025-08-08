@@ -5,7 +5,7 @@ This project is built using the following technologies:
 - PHP 8.3
 - Vue 3
 
-The project is designed to be mostly standalone and uses Docker for environment setup and builds.
+The project is designed to be mostly standalone (SPA) and uses Docker for environment setup and builds.
 
 Prerequisites
 To get started, you need to have Docker installed on your system. You can either:
