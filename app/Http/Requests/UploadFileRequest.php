@@ -8,7 +8,6 @@ class UploadFileRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // Adjust authorization logic as needed; for now allow all
         return true;
     }
 

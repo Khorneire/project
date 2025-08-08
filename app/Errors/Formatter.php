@@ -6,8 +6,6 @@ use Illuminate\Validation\ValidationException;
 use App\Errors\Exceptions\ApplicationException;
 use Throwable;
 
-use function App\isDebugMode;
-
 class Formatter
 {
     /**
@@ -20,10 +18,9 @@ class Formatter
      */
     public static function getMessage(Throwable $exception): string
     {
-        $isDebugMode = isDebugMode();
         $isApplicationException = ($exception instanceof ApplicationException);
 
-        return (!$isDebugMode && !$isApplicationException)
+        return (!$isApplicationException)
             ? 'Sorry, an unexpected error occurred.'
             : $exception->getMessage();
     }
@@ -51,7 +48,7 @@ class Formatter
      */
     public static function getStackTrace(Throwable $exception): ?array
     {
-        return (isDebugMode()) ? explode("\n", $exception->getTraceAsString()) : null;
+        return explode("\n", $exception->getTraceAsString());
     }
 
     /**

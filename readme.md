@@ -10,12 +10,10 @@ The project is designed to be mostly standalone and uses Docker for environment 
 Prerequisites
 To get started, you need to have Docker installed on your system. You can either:
 
-- Install Docker Desktop (recommended for Windows and Mac), or
-
 - Use Docker CLI on Linux or WSL2 (Windows Subsystem for Linux).
 
 Installing Docker on Linux / WSL2
-If you prefer to run Docker without Docker Desktop, follow these steps to install Docker Engine and Docker Compose CLI plugin:
+Follow these steps to install Docker Engine and Docker Compose CLI plugin:
 
 1. Install Docker Engine (No GUI)
 For Ubuntu/Debian systems, run:
@@ -44,6 +42,8 @@ docker compose up --build
 ```
 5. Access
 
-Visit http://localhost:8000
+Visit http://localhost:8000 , Front End View
+Visit http://localhost:8080 , phpmyadmin
 
-**If you need any help or run into issues, feel free to reach out!**
+**The initial build of the project may take a bit of time, for it to install its dependencies to allow it to run, apologies.
+If you need any help or run into issues, feel free to reach out!**

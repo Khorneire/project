@@ -10,8 +10,9 @@ module.exports = {
         "plugin:prettier/recommended",
     ],
     parserOptions: {
-        parser: "babel-eslint",
+        ecmaVersion: 13,
     },
+    ignorePatterns: ["**/*.jpg", "**/*.png"],
     rules: {
         "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
         "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
@@ -47,5 +48,8 @@ module.exports = {
             },
         ],
         "object-shorthand": ["error", "always"],
+        "vue/multi-word-component-names": 0,
+        "vue/no-multiple-template-root": 0,
+        "vue/no-v-model-argument": 0,
     },
 };

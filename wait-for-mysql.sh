@@ -1,13 +1,13 @@
 #!/bin/sh
-
-# wait-for-mysql.sh
 set -e
 
 host="$1"
-shift
+user="$2"
+pass="$3"
+shift 3
 cmd="$@"
 
-until mysql -h "$host" -u"$DB_USERNAME" -p"$DB_PASSWORD" -e 'SELECT 1'; do
+until mysql -h "$host" -u"$user" -p"$pass" -e 'SELECT 1'; do
   >&2 echo "MySQL is unavailable - sleeping"
   sleep 3
 done
